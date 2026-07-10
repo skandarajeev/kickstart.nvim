@@ -110,7 +110,7 @@ do
   vim.o.number = true
   -- You can also add relative line numbers, to help with jumping.
   --  Experiment for yourself to see if you like it!
-  -- vim.o.relativenumber = true
+  vim.o.relativenumber = true
 
   -- Enable mouse mode, can be useful for resizing splits for example!
   vim.o.mouse = 'a'
@@ -362,19 +362,19 @@ do
   }
 
   -- Useful plugin to show you pending keybinds.
-  vim.pack.add { gh 'folke/which-key.nvim' }
-  require('which-key').setup {
-    -- Delay between pressing a key and opening which-key (milliseconds)
-    delay = 0,
-    icons = { mappings = vim.g.have_nerd_font },
-    -- Document existing key chains
-    spec = {
-      { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
-      { '<leader>t', group = '[T]oggle' },
-      { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
-      { 'gr', group = 'LSP Actions', mode = { 'n' } },
-    },
-  }
+  -- vim.pack.add { gh 'folke/which-key.nvim' }
+  -- require('which-key').setup {
+  --   -- Delay between pressing a key and opening which-key (milliseconds)
+  --   delay = 0,
+  --   icons = { mappings = vim.g.have_nerd_font },
+  --   -- Document existing key chains
+  --   spec = {
+  --     { '<leader>s', group = '[S]earch', mode = { 'n', 'v' } },
+  --     { '<leader>t', group = '[T]oggle' },
+  --     { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } }, -- Enable gitsigns recommended keymaps first
+  --     { 'gr', group = 'LSP Actions', mode = { 'n' } },
+  --   },
+  -- }
 
   -- [[ Colorscheme ]]
   -- You can easily change to a different colorscheme.
@@ -692,12 +692,11 @@ do
   --  See `:help lsp-config` for information about keys and how to configure
   ---@type table<string, vim.lsp.Config>
   local servers = {
-    -- clangd = {},
-    -- gopls = {},
-    -- pyright = {},
-    -- rust_analyzer = {},
-    --
-    -- Some languages (like typescript) have entire language plugins that can be useful:
+    clangd = {},
+    gopls = {},
+    pyright = {},
+    rust_analyzer = {},
+   -- Some languages (like typescript) have entire language plugins that can be useful:
     --    https://github.com/pmizio/typescript-tools.nvim
     --
     -- But for many setups, the LSP (`ts_ls`) will work just fine
@@ -962,6 +961,7 @@ do
   -- place them in the correct locations.
 
   -- NOTE: Next step on your Neovim journey: Add/Configure additional plugins for Kickstart
+  vim.pack.add { 'https://github.com/ThePrimeagen/vim-be-good' }
   --
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
