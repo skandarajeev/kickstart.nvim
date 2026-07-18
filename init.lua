@@ -260,6 +260,7 @@ do
   -- Cutom Commands
   vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })
   vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center' })
+  vim.keymap.set('n', '<leader>e', '<cmd>Ex<cr>', {desc = 'To open explorer quikcly'})
 
 end
 
