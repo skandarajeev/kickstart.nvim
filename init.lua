@@ -260,8 +260,9 @@ do
   -- Cutom Commands
   vim.keymap.set('n', '<C-d>', '<C-d>zz', { desc = 'Scroll down and center' })
   vim.keymap.set('n', '<C-u>', '<C-u>zz', { desc = 'Scroll up and center' })
-  vim.keymap.set('n', '<leader>e', '<cmd>Ex<cr>', {desc = 'To open explorer quikcly'})
-
+  vim.keymap.set("i", "<M-BS>", "<C-w>", { noremap = true, desc = 'To delete word when pressing option back' })
+  vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { desc = 'Move selection down' })
+  vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { desc = 'Move selection up' })
 end
 
 -- ============================================================
@@ -490,15 +491,85 @@ do
   -- do as well as how to actually do it!
 
   ---@type (string|vim.pack.Spec)[]
+  
   local telescope_plugins = {
-    gh 'nvim-lua/plenary.nvim',
-    gh 'nvim-telescope/telescope.nvim',
-    gh 'nvim-telescope/telescope-ui-select.nvim',
-  }
+  gh 'nvim-lua/plenary.nvim',
+  gh 'nvim-telescope/telescope.nvim',
+  gh 'nvim-telescope/telescope-ui-select.nvim',
+
+  {
+    src = gh 'ThePrimeagen/harpoon',
+    version = 'harpoon2',
+  },
+  gh 'karb94/neoscroll.nvim',
+}
   if vim.fn.executable 'make' == 1 then table.insert(telescope_plugins, gh 'nvim-telescope/telescope-fzf-native.nvim') end
 
   -- NOTE: You can install multiple plugins at once
   vim.pack.add(telescope_plugins)
+  -- [[ Fast smooth scrolling ]]
+  local neoscroll = require 'neoscroll'
+
+  neoscroll.setup {
+  mappings = {},
+  hide_cursor = true,
+  easing = 'quadratic',
+  post_hook = function(info)
+    if type(info) == 'table' and info.center then
+      neoscroll.zz { half_win_duration = 80 }
+    end
+  end,
+}
+
+vim.keymap.set('n', '<C-d>', function()
+  neoscroll.ctrl_d { duration = 100, info = { center = true } }
+end, { desc = 'Smooth scroll down and center' })
+
+vim.keymap.set('n', '<C-u>', function()
+  neoscroll.ctrl_u { duration = 100, info = { center = true } }
+end, { desc = 'Smooth scroll up and center' })
+
+  -- [[ Harpoon ]]
+  local harpoon = require 'harpoon'
+
+  -- Required by Harpoon 2
+  harpoon:setup()
+
+-- Add the current file
+  vim.keymap.set('n', '<leader>a', function()
+    harpoon:list():add()
+  end, { desc = 'Harpoon: Add file' })
+
+  -- Open the Harpoon menu
+  vim.keymap.set('n', '<leader>e', function()
+    harpoon.ui:toggle_quick_menu(harpoon:list())
+  end, { desc = 'Harpoon: Open menu' })
+
+  -- Jump directly to saved files
+  vim.keymap.set('n', '<leader>1', function()
+    harpoon:list():select(1)
+  end, { desc = 'Harpoon: File 1' })
+
+  vim.keymap.set('n', '<leader>2', function()
+    harpoon:list():select(2)
+  end, { desc = 'Harpoon: File 2' })
+
+  vim.keymap.set('n', '<leader>3', function()
+    harpoon:list():select(3)
+  end, { desc = 'Harpoon: File 3' })
+
+  vim.keymap.set('n', '<leader>4', function()
+    harpoon:list():select(4)
+  end, { desc = 'Harpoon: File 4' })
+
+  -- Optional: cycle through the list
+  vim.keymap.set('n', '<leader>[', function()
+    harpoon:list():prev()
+  end, { desc = 'Harpoon: Previous file' })
+
+  vim.keymap.set('n', '<leader>]', function()
+    harpoon:list():next()
+  end, { desc = 'Harpoon: Next file' })
 
   -- See `:help telescope` and `:help telescope.setup()`
   require('telescope').setup {
@@ -707,13 +778,13 @@ do
     gopls = {},
     pyright = {},
     rust_analyzer = {},
+    kotlin_lsp = {},
    -- Some languages (like typescript) have entire language plugins that can be useful:
     --    https://github.com/pmizio/typescript-tools.nvim
     --
     -- But for many setups, the LSP (`ts_ls`) will work just fine
      ts_ls = {},
 
-    stylua = {}, -- Used to format Lua code
 
     -- Special Lua Config, as recommended by neovim help docs
     lua_ls = {
